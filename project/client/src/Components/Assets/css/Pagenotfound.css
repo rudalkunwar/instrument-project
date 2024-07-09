@@ -1,0 +1,64 @@
+.page_404 {
+    padding: 10px 0;
+    background: #fff;
+    font-family: 'Arvo', serif;
+}
+
+.page_404 img {
+    width: 100%;
+    
+}
+
+.four_zero_four_bg {
+    background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+    height: 80vh;
+    width: 100vw;
+    margin: auto;
+    background-position: center;
+    background-size:contain; /* Ensures the image covers the container */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+   
+}
+
+
+
+.four_zero_four_bg h1 {
+    font-size: 80px;
+}
+
+.four_zero_four_bg h3 {
+    font-size: 80px;
+}
+
+.link_404 {
+    color: #fff !important;
+    padding: 10px 20px;
+    background: #22971a;
+    margin: 10px 0;
+    display: inline-block;
+    font-weight: bold;
+    border-radius:12px;
+    font-size: 18px;
+    transition: .25s;
+}
+
+.link_404:hover{
+    transform: scale(1.1);
+    transition: .25s;
+}
+
+
+
+.contant_box_404 {
+    margin-top: -50px;
+}
+.h2{
+    font-weight: bold;
+    font-size:32px;
+   
+}
+.container p{
+    font-size: 25px;
+    font-weight: bold;
+    color:rgb(41, 39, 39)
+}
