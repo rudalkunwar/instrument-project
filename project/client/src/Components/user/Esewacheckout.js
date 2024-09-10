@@ -8,6 +8,7 @@ export default function Esewacheckout() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const data = query.get('data');
+    console.log("i am here");
     console.log(data);
 
     const verifyPayment = async () => {

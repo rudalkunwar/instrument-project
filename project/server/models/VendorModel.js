@@ -45,10 +45,15 @@ const vendorSchema = new Schema({
             required: true,
         },
     },
+
     token:{
         type:String,
         default:null,
-    }
+    },
+    profileimage:{
+        type:String,
+        default:null,
+    },
 });
 
 

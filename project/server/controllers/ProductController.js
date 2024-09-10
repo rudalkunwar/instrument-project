@@ -5,8 +5,6 @@ const Product = require('../models/ProductModel')
 
 const productuploads = async (req, res) => {
 
-    console.log(req.user);
-
 
     if (req.file.mimetype == 'image/png' || req.file.mimetype == 'image/jpg' || req.file.mimetype == 'image/jpeg') {
         if (req.file.size <= 1 * 1024 * 1024) {
@@ -25,7 +23,6 @@ const productuploads = async (req, res) => {
         const { product_name, title, regular_price, sales_price, stock, category, visibility, description } = req.body;
         const { warrenty_year, warrenty_month } = req.body;
         const user_id = req.user.id;
-        console.log(user_id);
         const newProduct = new Product({
             user: user_id,
             product_name,
@@ -60,9 +57,22 @@ const allProduct = async (req, res) => {
     
     try {
         const userData = await Product.find();
-        console.log(userData);
         return res.status(200).json({ products: userData });
 
+    } catch (error) {
+        return res.status(400).json("unbale to fetch data");
+    }
+}
+
+//fetch product by user id
+const fetchproductbyid= async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+  
+    try {
+        const productdata = await Product.findById(id);
+        console.log(productdata);
+        return res.status(200).json({ products: productdata });
     } catch (error) {
         return res.status(400).json("unbale to fetch data");
     }
@@ -72,9 +82,11 @@ const allProduct = async (req, res) => {
 
 
 
-//admin
 
-const fetchProduct = async (req, res) => {
+
+//vendor
+
+const fetchproductbyvendor = async (req, res) => {
     const user=req.user.id;
    
       try{
@@ -91,6 +103,8 @@ const fetchProduct = async (req, res) => {
 
 
 
+
+
 module.exports = {
-    productuploads, allProduct,fetchProduct
+    productuploads, allProduct,fetchproductbyvendor,fetchproductbyid
 };

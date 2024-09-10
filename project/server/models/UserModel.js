@@ -44,7 +44,12 @@ const userSchema = new Schema({
     token:{
         type:String,
         default:null,
+    },
+    profileimage:{
+        type:String,
+        default:null,
     }
+
 });
 
 

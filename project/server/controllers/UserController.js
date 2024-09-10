@@ -38,7 +38,7 @@ const register = async (req, res) => {
             }
 
             const newUser = new User({
-                
+
                 name,
                 phone,
                 email,
@@ -160,9 +160,8 @@ const login = async (req, res) => {
             if (!passwordMatch) {
                 console.log("Password does not match");
                 return res.status(401).json({ message: "Incorrect password" });
-            } 
-            else
-             {
+            }
+            else {
                 const usertype = "vendor";
 
 
@@ -183,7 +182,7 @@ const login = async (req, res) => {
                     httpOnly: true,
 
                 };
-                
+
 
 
                 return res.status(200).cookie("token", token, option).json({ success: true, message: "successfully login", token, vendorData, usertype });
@@ -285,7 +284,169 @@ const changepassword = async (req, res) => {
 }
 
 
+const userprofile = async (req, res) => {
+    try {
+        console.log("i am here profile");
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        return res.status(200).json(user);
+    }
+    catch (error) {
+        console.error("Error fetching user profile:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+
+}
+
+const userprofileimage = async (req, res) => {
+
+    const userid = req.user.id;
+    console.log(req.file);
+    var image = req.file.path;
+
+    try {
+        const user = await User.find({ _id: userid });
+
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userid },
+            { profileimage: image },
+            { new: true }
+        );
+        if (!updatedUser) {
+            return res.status(400).json({ message: "User not found" });
+        }
 
 
 
-module.exports = { register, login, forgotpassword, changepassword,};
+        return res.status(200).json({ message: "Profile image updated successfully  " });
+
+
+    }
+    catch (error) {
+        {
+            console.error("Error updating profile image:", error);
+            return res.status(500).json({ message: "Internal server error" });
+
+        }
+    }
+
+
+}
+
+const vendorprofileimage = async (req, res) => {
+    
+        const userid = req.user.id;
+        console.log(req.file);
+        var image = req.file.path;
+    
+        try {
+            const user = await Vendor.find({ _id: userid });
+    
+            if (!user) {
+                return res.status(400).json({ message: "User not found" });
+            }
+            const updatedUser = await Vendor.findOneAndUpdate(
+                { _id: userid },
+                { profileimage: image },
+                { new: true }
+            );
+            if (!updatedUser) {
+                return res.status(400).json({ message: "User not found" });
+            }
+
+            return res.status(200).json({ message: "Profile image updated successfully  " });
+
+        }
+        catch (error) {
+            {
+                console.error("Error updating profile image:", error);
+                return res.status(500).json({ message: "Internal server error" });
+    
+            }
+        }
+
+}
+
+const vendorpasswordchange = async (req, res) => {  
+
+    console.log(req.body);
+    const{oldpassword,newpassword}=req.body;
+    const userid = req.user.id;
+    try {
+        const user = await Vendor
+            .findOne({ _id: userid })
+            .select('password');
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        const passwordMatch = await bcrypt.compare(oldpassword, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ message: "Incorrect password" });
+        }
+       
+        const hashPassword = await bcrypt.hash(newpassword, 10);
+        const updatedUser = await
+
+            Vendor.findOneAndUpdate(
+                { _id: userid },
+                { password: hashPassword },
+                { new: true }
+            );
+        if (!updatedUser) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        return res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+        console.error("Error updating password:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+const profilepasswordchange = async (req, res) => {
+   
+    console.log(req.body);
+    const{oldpassword,newpassword}=req.body;
+    const userid = req.user.id;
+    try {
+        const user = await User
+            .findOne({ _id: userid })
+            .select('password');
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        const passwordMatch = await bcrypt.compare(oldpassword, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ message: "Incorrect password" });
+        }
+       
+        const hashPassword = await bcrypt.hash(newpassword, 10);
+        const updatedUser = await
+
+            User.findOneAndUpdate(
+                { _id: userid },
+                { password: hashPassword },
+                { new: true }
+            );
+        if (!updatedUser) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        return res.status(200).json({ message: "Password updated successfully" });
+
+
+
+
+
+    } catch (error) {
+        console.error("Error updating password:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+
+
+    module.exports = { register, login, forgotpassword, changepassword, userprofile, userprofileimage, profilepasswordchange,vendorprofileimage,vendorpasswordchange };

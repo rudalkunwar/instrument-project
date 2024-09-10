@@ -23,6 +23,9 @@ import Userorder from './Components/user/Userorder';
 import Shop from './Components/user/Shop';
 import Order from './Components/vendor/Order';
 import Product from './Components/vendor/Product';
+import Productview from './Components/user/Productview';
+import OrderProduct from './Components/vendor/OrderProduct';
+import Profile from './Components/user/Profile';
 
 
 
@@ -41,15 +44,19 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Index />} />
-          <Route path='/vendors/:name' element={<VendorProtected Component={PageRouter}/>}>
+          <Route path='productview' element={<UserRouter Component={Productview}/>}/>
+          <Route path='/vendors/' element={<VendorProtected Component={PageRouter}/>}>
             <Route index element={<Vendor/>}/>
+            <Route path='dashboard'  element={<VendorProtected Component={Vendor}/>} />
             <Route path='addproduct'  element={<VendorProtected Component={AddProduct}/>} />
             <Route path='profile' element={<VendorProfile />} />
             <Route path='order' element={<VendorProtected Component={Order}/>} />
             <Route path='product' element={<VendorProtected Component={Product}/>} />
+            <Route path='productview/:id' element={<VendorProtected Component={OrderProduct}/>}/>
+            
          
           </Route>
-          <Route path='/users/:name' element={<UserRouter Component={pageRouterUser} />} >
+          <Route path='/users/' element={<UserRouter Component={pageRouterUser} />} >
 
             <Route index element={<User/>}/>
             <Route path='addtocart' element={<UserRouter Component={AddCart}/>}/>
@@ -58,6 +65,9 @@ function App() {
             <Route path='esewacheckout' element={<UserRouter Component={Esewacheckout}/>}/>
             <Route path='order' element={<UserRouter Component={Userorder}/>}/>
             <Route path='shop' element={<UserRouter Component={Shop}/>}/>
+            <Route path='productview/:id' element={<UserRouter Component={Productview}/>}/>
+            <Route path="profile" element={<UserRouter Component={Profile} />} />
+    
            
            
 

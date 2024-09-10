@@ -5,6 +5,7 @@ const getEsewaPaymentHash = require('../functions/esewaHashfunction');
 const verifyEsewaPayment = require('../functions/esewaVerifyfunction');
 const Payment = require('../models/PaymentModel');
 const Cart = require('../models/CartModel');
+const Product = require('../models/ProductModel');
 
 
 
@@ -83,12 +84,14 @@ const EsewaPaymentVerify = async (req, res) => {
   try {
 
     const paymentInfo = await verifyEsewaPayment(data);
+    console.log("this is payment info");
+    console.log(paymentInfo);
 
 
     const purchasedItemData = await Order.findById(
       paymentInfo.response.transaction_uuid
     );
-
+console.log(purchasedItemData);
 
     if (!purchasedItemData) {
       return res.status(500).json({
@@ -99,12 +102,12 @@ const EsewaPaymentVerify = async (req, res) => {
 
 
     const paymentData = await Payment.create({
-      pidx: paymentInfo.decodedData.transaction_code,
-      transactionId: paymentInfo.decodedData.transaction_code,
+      pidx: paymentInfo.response.transaction_code,
+      transactionId: paymentInfo.response.transaction_code,
       orderId: paymentInfo.response.transaction_uuid,
       amount: purchasedItemData.totalAmount,
-      dataFromVerificationReq: paymentInfo,
-      apiQueryFromUser: req.query,
+      // dataFromVerificationReq: paymentInfo,
+      // apiQueryFromUser: req.query,
       paymentGateway: "esewa",
       status: "success",
     });
@@ -165,4 +168,107 @@ const deleteorder = async (req, res) => {
     res.status(400).json({ message: "order not found" });
   }
 }
-module.exports = { orderplace, fetchorder, EsewaPaymentVerify, getorder, deleteorder }
+
+
+
+//vendor
+
+//find order product details where vendor id is equal to user id
+const fetchorderbyvendor = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    console.log(user_id); 
+
+    // Fetch the vendor's products
+    const vendorProducts = await Product.find({ user: user_id }).select('_id'); // Select only the _id field
+
+    // Find all orders and populate the product details within items
+    const orders = await Order.find()
+    .populate('items','Product') // Populate product details within items
+    .sort({ createdAt: -1 });
+     
+
+    console.log(orders);
+
+    // Filter orders to include only those that contain items with products from the vendor
+    const filteredOrders = orders.map((order) => {
+      const filteredItems = order.items.filter((item) => 
+        vendorProducts.some((vendorProduct) => 
+          vendorProduct._id.toString() === item.productId._id.toString()
+        )
+      );
+      
+      return {
+        _id: order._id,
+        customer: order.customer,
+        shippingDetails: order.shippingDetails,
+        paymentMethod: order.paymentMethod,
+        items: filteredItems,
+        totalAmount: order.totalAmount, // Make sure to include the total amount
+        paymentStatus: order.paymentStatus,
+        createdAt: order.createdAt,
+      };
+    }).filter((order) => order.items.length > 0); // Only include orders with filtered items
+
+    console.log(filteredOrders);
+
+    return res.status(200).json({ status: "success", message: "Orders fetched", orders: filteredOrders });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: "error", message: "An error occurred while fetching orders" });
+  }
+};
+
+
+
+const fetchorderbyvendororderid = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+
+    
+    const { id } = req.params; // Retrieve the order ID from URL parameters
+    console.log(id);
+
+    console.log(user_id);
+    
+    // Fetch the vendor's products
+    const vendorProducts = await Product.find({ user: user_id });
+
+    // Fetch the order by its ID
+    const order = await Order.findById({_id:id})
+      .populate('items','Product') // Populate product details within items
+      .sort({ createdAt: -1 });
+
+    if (!order) {
+      return res.status(404).json({ status: "error", message: "Order not found" });
+    }
+
+    // Filter items based on the vendor's products
+    const filteredItems = order.items.filter(item => 
+      vendorProducts.some(vendorProduct => vendorProduct._id.toString() === item.productId.toString())
+    );
+
+    // Construct the response object
+    const response = {
+      _id: order._id,
+      customer: order.customer,
+      shippingDetails: order.shippingDetails,
+      paymentMethod: order.paymentMethod,
+      items: filteredItems,
+      totalAmount: order.totalAmount,
+      paymentStatus: order.paymentStatus,
+      createdAt: order.createdAt,
+    };
+
+    console.log(response);
+
+    return res.status(200).json({ status: "success", message: "Order fetched", order: response });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: "error", message: "An error occurred while fetching the order" });
+  }
+};
+
+
+
+module.exports = { orderplace, fetchorder, EsewaPaymentVerify, getorder, deleteorder,fetchorderbyvendor,fetchorderbyvendororderid };

@@ -18,33 +18,26 @@ const VendorNavbar = () => {
         }, duration);
     };
 
-    const logouthandler=()=>{
+    const logouthandler = () => {
         sessionStorage.removeItem('reduxState');
         for (let i = 0; i < sessionStorage.length; i++) {
             const key = sessionStorage.key(i);
             sessionStorage.removeItem(key);
-          }
+        }
 
-          for (let i = 0; i < localStorage.length; i++) {
+        for (let i = 0; i < localStorage.length; i++) {
             const keyy = localStorage.key(i);
             localStorage.removeItem(keyy);
-          }
+        }
         dispatchh(userLogout());
         navigate('/')
 
-        
-        
+
+
 
     }
 
-    const sessiondata = useSelector(state => state.authenticate);
-    let slug = ""; 
-    const name = sessiondata.userInfo.name;
- 
-    if (name != null) {
-        
-        slug = name.replace(" ", "-");
-    }
+
 
 
 
@@ -61,7 +54,7 @@ const VendorNavbar = () => {
                     onClick={() => smoothTransition(element.current, '50px', 50)}
                     ref={element}>
                     <li>
-                        <Link to={`/vendors/${slug}`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="dashboard" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div> <ion-icon class="text-2xl px-4"
@@ -74,11 +67,11 @@ const VendorNavbar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={`/vendors/${slug}/addproduct`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="addproduct" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div>
-                            <ion-icon class="text-2xl px-4" name="add-circle-outline"></ion-icon>
+                                <ion-icon class="text-2xl px-4" name="add-circle-outline"></ion-icon>
                             </div>
                             <div class="cursor-pointer w-full"  >
                                 AddProduct
@@ -87,7 +80,7 @@ const VendorNavbar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={`/vendors/${slug}/product`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="product" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div> <ion-icon class="text-2xl px-4"
@@ -100,7 +93,7 @@ const VendorNavbar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={`/vendors/${slug}/order`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="order" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div> <ion-icon class="text-2xl px-4"
@@ -111,50 +104,12 @@ const VendorNavbar = () => {
                             </div>
 
                         </Link>
-                    </li> <li>
-                        <Link to={`/vendors/${slug}/addproduct`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
-
-
-                            <div> <ion-icon class="text-2xl px-4"
-                                name="person-outline"></ion-icon>
-                            </div>
-                            <div class="cash-pointer w-full"  >
-                                Payments
-                            </div>
-
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={`/vendors/${slug}/addproduct`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
-
-
-                            <div> <ion-icon class="text-2xl px-4"
-                                name="person-outline"></ion-icon>
-                            </div>
-                            <div class="chatbubbles-pointer w-full"  >
-                                Message
-                            </div>
-
-                        </Link>
-                    </li>
+                    </li> 
+                    
+                    
 
                     <li>
-                        <Link to={`/vendors/${slug}/addproduct`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
-
-
-                            <div> <ion-icon class="text-2xl px-4"
-                                name="notifications-outline"></ion-icon>
-                            </div>
-                            <div class="cursor-pointer w-full"  >
-                                Notification
-                            </div>
-
-                        </Link>
-                    </li>
-
-
-                    <li>
-                        <Link to={`/vendors/${slug}/profile`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="profile" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div> <ion-icon class="text-2xl px-4"
@@ -181,7 +136,7 @@ const VendorNavbar = () => {
                         </button>
                     </li>
 
-                    
+
                 </ul>
 
             </div>

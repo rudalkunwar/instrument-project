@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import UserNavbar from "../Navbar/UserNavbar";
 import '../Assets/css/Index.css';
 import image1 from "../Assets/image1.png";
@@ -8,8 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from '../api/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { addcart } from "../features/Addtocart"; // Ensure the action name is correct
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import aawaj from "../Assets/dataBaseImage/Aawaj.png";
+import aawaj2 from "../Assets/dataBaseImage/Aawaj2.png";
+
 
 const IndexLoggedin = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -17,7 +20,7 @@ const IndexLoggedin = () => {
     const [products, setProducts] = useState([]);
 
     const reduxdata = useSelector(state => state.authenticate);
-  
+
     const dispatch = useDispatch();
     const Navigate = useNavigate();
 
@@ -54,33 +57,9 @@ const IndexLoggedin = () => {
         setCurrentSlide((currentSlide + 1) % slides.length);
     };
 
-    const addToCart =async (product_id,) => {
-        const quantity=1;
-        const cartItem = {  product_id,quantity};
-        
-        try{
-            const response = await axios.post(
-                '/addcartapi',
-                cartItem,
-                {
-                    headers: {
-                       
-                        'x-access-token': localStorage.getItem('token'),
-                    },
-                }
-            );
-            console.log(response);
-           
-            toast.success(response.data.message);
-            Navigate('addtocart')
-        }catch(error)
-        {
-            console.log(error.response.data.message);
-            toast.error(error.response.data.message);
-        }
-    };
 
-   
+
+
 
     return (
         <div className="flex w-auto">
@@ -92,7 +71,12 @@ const IndexLoggedin = () => {
             <div className="w-screen ml-12">
                 <div className="bg-blue-50 h-screen">
                     <div className="flex justify-between text-center mx-20 items-center">
-                        <div className="text-green-600 text-2xl my-2 font-bold">Logo</div>
+                        <div className="text-green-600 text-2xl my-2 font-bold">
+
+                        <img src={aawaj2} alt="Company Logo" className="h-20 mr-4" />
+
+
+                        </div>
                         <div className="text-2xl font-bold">
                             <h2>Nepal Instrument</h2>
                         </div>
@@ -159,48 +143,67 @@ const IndexLoggedin = () => {
                         </div>
                     </div>
 
+                    <div className="container mx-auto ">
+                        <div className="text-2xl text-center font-bold text-gray-800 mb-8">
+                            <h2 class="bg-gray-900 text-gray-200 px-5 py-1 rounded ">Latest Products</h2>
+                        </div>
+                    </div>
+
+
                     <div className="container mx-auto mt-10 px-4 py-8">
-                        <div className="feature_product grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {products.map((product, index) => (
-                                <div key={index} className="border rounded-lg p-6 bg-white shadow-md">
-                                    <div className="w-full h-40 p-3 m-auto">
-                                        <img src={`http://localhost:5000/${product.image}`} alt={product.product_name} className="w-5/12 h-40 m-auto object-cover mb-4" />
+                        <div className="latest-products grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                            {products?.slice(0, 5).map((product, index) => (
+                                <div key={index} className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                                    <div className="relative">
+                                        <img
+                                            src={`http://localhost:5000/${product.image}`}
+                                            alt={product.product_name}
+                                            className="w-full h-48 object-cover"
+                                        />
+                                        <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded-br-lg">
+                                            New
+                                        </div>
                                     </div>
-                                    <h3 className="text-lg font-semibold text-gray-800">{product.product_name}</h3>
-                                    <h1 className="text-gray-600 mt-2">{product.title}</h1>
-                                    <div className="flex items-center mt-4">
-                                        <span className="text-gray-700 font-semibold">Rs {product.price.regular_price}</span>
-                                        <button onClick={() => addToCart(product._id,product.price.sales_price)} className="ml-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                            Add to Cart
-                                        </button>
+                                    <div className="p-6">
+                                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{product.product_name}</h3>
+                                        <h4 className="text-gray-700 text-sm mb-4">{product.title}</h4>
+                                        <div className="flex flex-col space-y-2 mb-4">
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-gray-500 line-through text-sm">Rs {product.price.regular_price}</span>
+                                                <span className="text-red-500 font-semibold text-lg">Rs {product.price.sales_price}</span>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <Link to={`productview/${product._id}`} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 ease-in-out">
+                                                    View Product
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <footer className="py-12 bg-gray-900 text-white">
+
+                    <footer className="py-8 bg-gray-900 text-white">
                         <div className="container mx-auto">
                             <div className="flex justify-around items-center mb-8">
                                 <div className="flex items-center">
-                                    <img src="company_logo.png" alt="Company Logo" className="h-12 mr-4" />
-                                    <p className="text-lg">Instrument Nepal - Your Destination for Quality Instruments</p>
+                                    <img src={aawaj} alt="Company Logo" className="h-40 mr-4" />
+                                    <h1 className="text-lg">Instrument Nepal - Your Destination for Quality Instruments</h1 >
                                 </div>
 
                                 <ul className="grid grid-cols-3 gap-4">
                                     <li><a href="#" className="hover:text-gray-400">Home</a></li>
                                     <li><a href="#" className="hover:text-gray-400">Store</a></li>
                                     <li><a href="#" className="hover:text-gray-400">Order</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">Payment</a></li>
                                     <li><a href="#" className="hover:text-gray-400">Profile</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">Notification</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">Message</a></li>
                                     <li><a href="#" className="hover:text-gray-400">About</a></li>
                                     <li><a href="#" className="hover:text-gray-400">Help</a></li>
                                 </ul>
                             </div>
 
-                            <div>&copy; 2024 Instrument Nepal. All rights reserved.</div>
+                            <div class="text-center">&copy; 2024 Instrument Nepal. All rights reserved.</div>
                         </div>
                     </footer>
                 </div>

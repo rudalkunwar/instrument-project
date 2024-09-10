@@ -45,7 +45,7 @@ const UserNavbar = () => {
 
     return (
         <div
-            className="bg-green-900 w-14 h-screen py-10 overflow-hidden fixed z-10"
+            className="bg-gray-900 w-14 h-screen py-10 overflow-hidden fixed z-10"
             onMouseOver={() => smoothTransition(element.current, '360px', 300)}
             onMouseOut={() => smoothTransition(element.current, '50px', 300)}
             onFocus={() => smoothTransition(element.current, '360px', 300)}
@@ -55,7 +55,7 @@ const UserNavbar = () => {
             <div>
                 <ul class="list-none">
                 <li>
-                        <Link to={`/users/${slug}`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="/users/" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div>
@@ -68,7 +68,7 @@ const UserNavbar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={`/users/${slug}/shop`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="shop" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div>
@@ -82,7 +82,7 @@ const UserNavbar = () => {
                     </li>
                     
                     <li>
-                        <Link to={`/users/${slug}/addtocart`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="addtocart" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div>
@@ -96,7 +96,7 @@ const UserNavbar = () => {
                     </li>
 
                     <li>
-                        <Link to={`/users/${slug}/order`} class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="order" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div>
@@ -108,30 +108,12 @@ const UserNavbar = () => {
 
                         </Link>
                     </li>
-                    <li
-                        class=" text-white hover:bg-white hover:text-black py-2 my-2 flex">
-                        <div> <ion-icon class="text-2xl px-4" name="chatbubble-outline"></ion-icon></div>
-                        <div class=" cursor-pointer w-full"><a class="text-xl mx-3 font-bold" Link="">
-                            Message</a></div>
-                    </li>
+                   
+
+                    
 
                     <li>
-                        <Link to="" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
-
-
-                            <div>
-                            <ion-icon class="text-2xl px-4" name="add-circle-outline"></ion-icon>
-                            </div>
-                            <div class="cursor-pointer w-full"  >
-                               Notification
-                            </div>
-
-                        </Link>
-                    </li>
-
-
-                    <li>
-                        <Link to="" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
+                        <Link to="profile" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
 
 
                             <div>
@@ -144,19 +126,7 @@ const UserNavbar = () => {
                         </Link>
                     </li>
 
-                    <li>
-                        <Link to="" class="text-xl  font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex" >
-
-
-                            <div>
-                            <ion-icon class="text-2xl px-4" name="add-circle-outline"></ion-icon>
-                            </div>
-                            <div class="cursor-pointer w-full"  >
-                               Help
-                            </div>
-
-                        </Link>
-                    </li>
+              
 
                  
 

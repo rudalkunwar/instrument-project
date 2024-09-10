@@ -6,7 +6,9 @@ export default function PageRouter() {
   return (
     <div>
         <VendorNavbar/>
+        <div class="ml-10">
         <Outlet/>
+        </div>
     </div>
   )
 }

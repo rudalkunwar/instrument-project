@@ -49,12 +49,9 @@ export default function Login() {
                     dispatchh(userLogin(email, id, name, usertype));
                     toast.success("Successfully Login!");
                     
-                    const slug=name.replace(" ","-");
-                    console.log(slug);
-
-
-                    navigate(`/vendors/${slug}`);
-                    console.log("this is vendor");
+                   
+                    navigate("/vendors/");
+                    
                 }
                 else if (usertype === "user") {
                     localStorage.setItem("token", token)
@@ -65,12 +62,9 @@ export default function Login() {
                     dispatchh(userLogin(email, id, name, usertype));
                     toast.success("Successfully Login!");
 
-                    const slug=name.replace(" ","-");
-                    console.log(slug);
-
-
-                    navigate(`/users/${slug}`);
-                    console.log("this is user");
+                  
+                   navigate("/users/");
+                  
                 }
 
                 else {
@@ -94,7 +88,7 @@ export default function Login() {
 
     return (
         <div>
-            <section className="bg-gray-50 bg-slate-900">
+            <section className=" bg-slate-900">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                         <h2 className="text-2xl font-bold text-gray-500">Instrument Marketplace</h2>

@@ -1,84 +1,142 @@
-import React, { useEffect, useState } from 'react'
-import '../Assets/css/Userdetails.css'
-import axios from '../api/api'
+import React, { useEffect, useState } from 'react';
+import axios from '../api/api';
+import { Link } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 export default function Product() {
- const [product, setproduct] = useState([null]);
- let count=1;
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+  let count = (currentPage - 1) * itemsPerPage + 1;
 
-    const getproduct = async () => {
-        try {
-            const response = await axios.get('/allproductapi', {
-                headers: {
-                    'x-access-token': localStorage.getItem('token')
-                }
-            })
-            console.log(response.data)
-            setproduct(response.data.products)
+  const getProducts = async () => {
+    try {
+      const response = await axios.get('/fetchproductbyvendorapi', {
+        headers: {
+          'x-access-token': localStorage.getItem('token')
         }
-        catch (err) {
-            console.log(err)
-        }
-
+      });
+      setProducts(response.data.products);
+    } catch (err) {
+      console.log(err);
     }
- useEffect(() => {
-        getproduct()
-    }
-    , []);
+  };
 
- if(product[0] === null) return (<div>Loading...</div>);
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const filteredProducts = products.filter(product =>
+    product.product_name.toLowerCase().includes(search.toLowerCase()) ||
+    product.category.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  if (products.length === 0) return (<div>Loading...</div>);
 
   return (
-    <div>
-        <div className="text-3xl font-bold mb-8 text-center">
-            <h2>Product Details</h2>
-        </div>
-    
-        <body class="main_container  ">
-            <div class="header_fixed ">
-            <table>
-                <thead>
-                <tr>
-                    <th>S.N</th>
-                    <th>Product Name</th>
-                    <th> Regular Price</th>
-                    <th>Sales_Price</th>
-                    <th>Product Stock</th>
-                    <th>Product Category</th>
-                    <th>Product title</th>
-                    <th>Product Image</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    product.map((product) => {
-                        return (
-                            <tr>
-                                <td>{count++}</td>
-                                <td>{product.product_name}</td>
-                                <td>{product.price.regular_price}</td>
-                                <td>{product.price.sales_price}</td>
-                                <td>{product.stock}</td>
-                                <td>{product.category}</td>
-                                <td>{product.description}</td>
-                                <td><img src={`http://localhost:5000/${product.image}`} alt="product" /></td>
-                                <td>
-                                    <div>
-                                    <i class="fa-solid fa-pen-to-square text-blue-600 text-2xl mx-2"></i>
-                                    <i class="fa-solid fa-trash text-red-600 text-2xl mx-2"></i>
-                                    <i class="fa-solid fa-eye text-gray-500 text-2xl mx-2"></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        )
-                    })
-                }
-                </tbody>
-            </table>
-            </div>
-        </body>
+    <div className="container mx-auto p-4">
+      <ToastContainer/>
+      <div className="text-3xl  mb-8 font-bold text-gray-800">
+        <h2>Product Details</h2>
+      </div>
+     <div class="flex justify-between">
+     <div className="mb-4 w-10/12 flex justify-between items-center">
+        <input
+          type="text"
+          placeholder="Search by product name or category"
+          value={search}
+          onChange={handleSearch}
+          className="p-2 border border-gray-300 rounded w-full max-w-md"
+        />
+      </div>
 
+      <div>
+        <Link to="../addproduct" className="bg-blue-600 text-white px-4 py-2 rounded-lg">Add Product</Link>
+      </div>
+     </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-3 px-4 border-b text-left text-gray-700">S.N</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Product Id</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Product Name</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Regular Price</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Sales Price</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Product Stock</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Product Category</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Description</th>
+              <th className="py-3 px-4 border-b text-left text-gray-700">Image</th>
+              <th className="py-3 px-4 border-b text-center text-gray-700">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              paginatedProducts.map((product) => (
+                <tr key={product.id} className="hover:bg-gray-50">
+                  <td className="py-3 px-4 border-b text-center">{count++}</td>
+                  <td className="py-3 px-4 border-b">{product._id}</td>
+                  <td className="py-3 px-4 border-b">{product.product_name}</td>
+                  <td className="py-3 px-4 border-b">{product.price.regular_price}</td>
+                  <td className="py-3 px-4 border-b">{product.price.sales_price}</td>
+                  <td className="py-3 px-4 border-b">{product.stock}</td>
+                  <td className="py-3 px-4 border-b">{product.category}</td>
+                  <td className="py-3 px-4 border-b">{product.description}</td>
+                  <td className="py-3 px-4 border-b"><img src={`http://localhost:5000/${product.image}`} alt="product" className="w-20 h-20 object-cover rounded-lg" /></td>
+                  <td className="py-3 px-4 border-b text-center">
+                    <div className="flex justify-center items-center space-x-4">
+                      <i className="fa-solid fa-pen-to-square text-blue-600 text-xl cursor-pointer"></i>
+                      <i className="fa-solid fa-trash text-red-600 text-xl cursor-pointer"></i>
+                      <i className="fa-solid fa-eye text-gray-500 text-xl cursor-pointer"></i>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <div className="flex justify-center mt-4">
+          <button
+            className={`px-3 py-1 mx-1 ${currentPage === 1 ? 'cursor-not-allowed text-gray-400' : 'text-blue-600'}`}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          {
+            Array.from({ length: Math.ceil(filteredProducts.length / itemsPerPage) }, (_, i) => (
+              <button
+                key={i + 1}
+                className={`px-3 py-1 mx-1 ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'text-blue-600'}`}
+                onClick={() => handlePageChange(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))
+          }
+          <button
+            className={`px-3 py-1 mx-1 ${currentPage === Math.ceil(filteredProducts.length / itemsPerPage) ? 'cursor-not-allowed text-gray-400' : 'text-blue-600'}`}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === Math.ceil(filteredProducts.length / itemsPerPage)}
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

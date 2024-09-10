@@ -391,7 +391,7 @@ export default function CheckOut() {
                   type="text"
                   id="success_url"
                   name="success_url"
-                  value={`http://localhost:3001/users/${slug}/esewacheckout`}
+                  value="http://localhost:3000/users/esewacheckout"
                   // value="http://localhost:5000/esewapaymentverifyapi"
                   class="form"
                   required=""
