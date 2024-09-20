@@ -9,6 +9,7 @@ import User from './Components/user/IndexLoggedin';
 import AddProduct from "./Components/vendor/AddProduct"
 import VendorProfile from"./Components/Pages/Profile";
 import PageRouter from './Components/PageRouter';
+import AdminRouter from './Components/AdminRouter';
 
 
 import VendorProtected from './ProtectedRouter/VendorRouter';
@@ -26,6 +27,16 @@ import Product from './Components/vendor/Product';
 import Productview from './Components/user/Productview';
 import OrderProduct from './Components/vendor/OrderProduct';
 import Profile from './Components/user/Profile';
+import EditProduct from './Components/vendor/EditProduct';
+import Adminrouter from './ProtectedRouter/Adminrouter';
+import AdminDashboard from './Components/admin/AdminDashboard';
+import AdminLogin from './Components/admin/AdminLogin';
+import Allproduct from './Components/admin/Product';
+import Vendors from './Components/admin/Vendors';
+import Users from './Components/admin/Users';
+import Ordert from './Components/admin/Order';
+import AboutUs from './Components/Aboutus';
+// import { orderplace } from '../../server/controllers/OrderController';
 
 
 
@@ -41,10 +52,12 @@ function App() {
 
 
         {/* <UserNavbar/> */}
-
         <Routes>
+      <Route path="/aboutus" element={<AboutUs/>}/>
+
           <Route path='/' element={<Index />} />
           <Route path='productview' element={<UserRouter Component={Productview}/>}/>
+
           <Route path='/vendors/' element={<VendorProtected Component={PageRouter}/>}>
             <Route index element={<Vendor/>}/>
             <Route path='dashboard'  element={<VendorProtected Component={Vendor}/>} />
@@ -53,6 +66,7 @@ function App() {
             <Route path='order' element={<VendorProtected Component={Order}/>} />
             <Route path='product' element={<VendorProtected Component={Product}/>} />
             <Route path='productview/:id' element={<VendorProtected Component={OrderProduct}/>}/>
+            <Route path='productedit/:id' element={<VendorProtected Component={EditProduct}/>}/>
             
          
           </Route>
@@ -72,6 +86,22 @@ function App() {
            
 
           </Route>
+          
+          <Route path="/admin/" element={<Adminrouter Component={AdminRouter}/>}>
+          <Route index element={<AdminDashboard/>}/>
+          <Route path="login" element={<Adminrouter Component={AdminLogin}/>}/>
+          <Route path="dashboard" element={<Adminrouter Component={AdminDashboard}/>}/>
+          <Route path="product" element={<Adminrouter Component={Allproduct}/>}/>
+          <Route path="productedit/:id" element={<Adminrouter Component={EditProduct}/>}/>
+          <Route path="allvendor" element={<Adminrouter Component={Vendors}/>}/>
+          <Route path="users" element={<Adminrouter Component={Users}/>}/>
+          <Route path="orders" element={<Adminrouter Component={Ordert}/>}/>
+          
+            
+          </Route>
+
+
+
           <Route path="/addbank" element={<BankAdd/>} />
 
 
@@ -82,7 +112,7 @@ function App() {
           <Route path='forgotpassword' element={<Forgotpassword/>}/>
           <Route path='confirmotp' element={<OtpEnter/>}/>
           <Route path='changepassword' element={<Changepassword/>}/> */}
-          {/* <Route path="*" element={<PageNotFound/>}/> */}
+          <Route path="*" element={<PageNotFound/>}/>
 
         </Routes>
       </div>

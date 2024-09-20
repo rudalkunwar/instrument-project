@@ -12,9 +12,7 @@ const UserNavbar = () => {
         const initialWidth = element.style.width || "auto";
         element.style.transition = `width ${duration}ms ease-in-out`;
         element.style.width = width;
-        setTimeout(() => {
-
-        }, duration);
+        setTimeout(() => {}, duration);
     };
 
     const logouthandler = () => {
@@ -29,11 +27,11 @@ const UserNavbar = () => {
             localStorage.removeItem(keyy);
         }
         dispatchh(userLogout());
-        navigate('/')
-    }
+        navigate('/');
+    };
 
     const sessiondata = useSelector(state => state.authenticate);
-    let slug = ""; // Initialize slug variable outside the conditional
+    let slug = "";
     const name = sessiondata.userInfo.name;
 
     if (name != null) {
@@ -50,64 +48,64 @@ const UserNavbar = () => {
             ref={element}
         >
             <div>
-                <ul className="list-none">
+                <ul class="list-none">
                     <li>
-                        <Link to="/users/" className="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
+                        <Link to="/admin/dashboard" class="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
                             <div>
-                                <i className="fas fa-home text-2xl px-4"></i>
+                                <ion-icon class="text-2xl px-4" name="speedometer-outline"></ion-icon>
                             </div>
-                            <div className="cursor-pointer w-full">
-                                Home
+                            <div class="cursor-pointer w-full">
+                                Dashboard
                             </div>
                         </Link>
                     </li>
                     <li>
-                        <Link to="shop" className="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
+                        <Link to="/admin/product" class="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
                             <div>
-                                <i className="fas fa-store text-2xl px-4"></i>
+                                <ion-icon class="text-2xl px-4" name="cube-outline"></ion-icon>
                             </div>
-                            <div className="cursor-pointer w-full">
-                                Shop
+                            <div class="cursor-pointer w-full">
+                                Products
                             </div>
                         </Link>
                     </li>
                     <li>
-                        <Link to="addtocart" className="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
+                        <Link to="/admin/allvendor" class="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
                             <div>
-                                <i className="fas fa-shopping-cart text-2xl px-4"></i>
+                                <ion-icon class="text-2xl px-4" name="people-outline"></ion-icon>
                             </div>
-                            <div className="cursor-pointer w-full">
-                                Cart
+                            <div class="cursor-pointer w-full">
+                                Vendors
                             </div>
                         </Link>
                     </li>
                     <li>
-                        <Link to="order" className="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
+                        <Link to="/admin/users" class="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
                             <div>
-                                <i className="fas fa-box text-2xl px-4"></i>
+                                <ion-icon class="text-2xl px-4" name="person-outline"></ion-icon>
                             </div>
-                            <div className="cursor-pointer w-full">
-                                Order
+                            <div class="cursor-pointer w-full">
+                                Users
                             </div>
                         </Link>
                     </li>
                     <li>
-                        <Link to="profile" className="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
+                        <Link to="/admin/orders" class="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
                             <div>
-                                <i className="fas fa-user text-2xl px-4"></i>
+                                <ion-icon class="text-2xl px-4" name="document-text-outline"></ion-icon>
                             </div>
-                            <div className="cursor-pointer w-full">
-                                Profile
+                            <div class="cursor-pointer w-full">
+                                Orders
                             </div>
                         </Link>
                     </li>
                     <li>
-                        <Link to="" className="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
+                        <Link to="" class="text-xl font-bold flex-1 text-white hover:bg-white hover:text-black py-2 my-2 flex">
                             <div>
-                                <i className="fas fa-sign-out-alt text-2xl px-4"></i>
+                                <ion-icon class="text-2xl px-4" name="log-out-outline"></ion-icon>
                             </div>
-                            <div className="cursor-pointer w-full">
-                                <button className="text-xl mx-3 font-bold" onClick={logouthandler}>Logout</button>
+                            <div class="cursor-pointer w-full">
+                                <button class="text-xl mx-3 font-bold" onClick={logouthandler}>Logout</button>
                             </div>
                         </Link>
                     </li>
@@ -115,5 +113,5 @@ const UserNavbar = () => {
             </div>
         </div>
     );
-}
+};
 export default UserNavbar;

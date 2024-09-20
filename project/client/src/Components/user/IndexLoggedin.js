@@ -80,9 +80,13 @@ const IndexLoggedin = () => {
                         <div className="text-2xl font-bold">
                             <h2>Nepal Instrument</h2>
                         </div>
-                        <div className="flex space-x-6">
-                            <a href="#" className="text-black text-2xl btn-hover"><ion-icon name="notifications-outline"></ion-icon></a>
-                            <a href="#" className="text-white text-center text-xl bg-red-600 btn-hover px-2 rounded-lg">Hotline<ion-icon name="call-outline"></ion-icon></a>
+                        <div className="text-center mb-8">
+                            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-4">
+                                Nepal Instrument
+                            </h2>
+                            <p className="text-lg text-gray-600">
+                                Discover the finest collection of traditional and modern instruments.
+                            </p>
                         </div>
                         <div className="flex space-x-5">
                             <h2 className="text-xl font-bold text-purple-600">Welcome!<span className="text-blue-700 font-semibold"> {reduxdata.userInfo.name}</span></h2>

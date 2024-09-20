@@ -17,16 +17,16 @@ export default function AddProduct() {
     const [error, seterror] = useState(null);
     const [Filess, setFile] = useState(null);
     const [esewa, setEsewa] = useState(false);
-    const  navigate = useNavigate();
+    const navigate = useNavigate();
 
-    
-    
+
+
 
     const btnHandler = (e) => {
         e.preventDefault();
         setBtnhidden(true);
     };
-   
+
 
     const initialValues = {
         product_name: "",
@@ -40,45 +40,44 @@ export default function AddProduct() {
         warrenty_year: "",
         warrenty_month: "",
         image: "",
-        status:btnhidden,
-        token:""
-        
+        status: btnhidden,
+        token: ""
+
     };
 
- 
 
 
-    const { values, errors, handleBlur, touched, handleChange, handleSubmit} = useFormik({
+
+    const { values, errors, handleBlur, touched, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         validationSchema: ProductSchema,
         onSubmit: async (values) => {
-            if(btnhidden==false)
-                {
-                    values.warrenty_month="";
-                    values.warrenty_year="";
-                }
-                values.token=localStorage.getItem('token');
+            if (btnhidden == false) {
+                values.warrenty_month = "";
+                values.warrenty_year = "";
+            }
+            values.token = localStorage.getItem('token');
 
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => {
                 formData.append(key, value);
             });
             formData.append('image', Filess);
-            formData.append('status',btnhidden);
+            formData.append('status', btnhidden);
             try {
                 seterror(null);
-                const response = await axios.post('productuploadsapi',formData, {
+                const response = await axios.post('productuploadsapi', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'x-access-token':localStorage.getItem('token'),
+                        'x-access-token': localStorage.getItem('token'),
                     },
                 });
-               setTimeout(() => {
-                toast.success("Product Added Successfully");
-                
-               }, 50);
+                setTimeout(() => {
+                    toast.success("Product Added Successfully");
+
+                }, 50);
                 navigate('../product');
-               
+
             } catch (error) {
                 console.error('Error:', error);
                 const receiveerror = error.response.data.message;
@@ -90,12 +89,12 @@ export default function AddProduct() {
         }
     });
 
-    
- 
+
+
 
     const cancelHandler = (e) => {
         e.preventDefault();
-    
+
         setBtnhidden(false);
     };
 
@@ -109,8 +108,8 @@ export default function AddProduct() {
     };
 
 
-//check esewa id is set or not
-    
+    //check esewa id is set or not
+
     const sessionData = useSelector(state => state.authenticate);
     const userType = sessionData.userInfo.usertype;
     const email = sessionData.userInfo.email;
@@ -121,15 +120,14 @@ export default function AddProduct() {
                     'x-access-token': localStorage.getItem('token')
                 }
             });
-           
-            const{vendor}=response.data;
-            if(vendor.esewaid==null){
+
+            const { vendor } = response.data;
+            if (vendor.esewaid == null) {
                 setEsewa(null);
-            }else
-            {
+            } else {
                 setEsewa(vendor.esewaid);
             }
-           
+
 
 
 
@@ -144,29 +142,29 @@ export default function AddProduct() {
 
     }, [userType, email, esewa]);
 
-    if(esewa==false){
-        return(
+    if (esewa == false) {
+        return (
             <div>
                 <span class="loader"></span>
             </div>
         )
     }
 
-    if(esewa==null){
+    if (esewa == null) {
         return (
             <div class="flex flex-col items-center dark:bg-gray-800 justify-center h-screen">
-            <h1 class="text-3xl font-bold text-gray-100 mb-4">Please Add Esewa ID</h1>
-            <div class="border w-full h-40 flex items-center justify-center">
-              <Link to="../profile" class="relative px-5 py-2 font-medium text-white group">
-                <span class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform translate-x-0 -skew-x-12 bg-purple-500 group-hover:bg-purple-700 group-hover:skew-x-12"></span>
-                <span class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform skew-x-12 bg-purple-700 group-hover:bg-purple-500 group-hover:-skew-x-12"></span>
-                <span class="absolute bottom-0 left-0 hidden w-10 h-40 transition-all duration-100 ease-out transform -translate-x-8 translate-y-10 bg-purple-600 -rotate-12"></span>
-                <span class="absolute bottom-0 right-0 hidden w-10 h-40 transition-all duration-100 ease-out transform translate-x-10 translate-y-8 bg-purple-400 -rotate-12"></span>
-                <span class="relative">Go to Profile</span>
-              </Link>
+                <h1 class="text-3xl font-bold text-gray-100 mb-4">Please Add Esewa ID</h1>
+                <div class="border w-full h-40 flex items-center justify-center">
+                    <Link to="../profile" class="relative px-5 py-2 font-medium text-white group">
+                        <span class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform translate-x-0 -skew-x-12 bg-purple-500 group-hover:bg-purple-700 group-hover:skew-x-12"></span>
+                        <span class="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform skew-x-12 bg-purple-700 group-hover:bg-purple-500 group-hover:-skew-x-12"></span>
+                        <span class="absolute bottom-0 left-0 hidden w-10 h-40 transition-all duration-100 ease-out transform -translate-x-8 translate-y-10 bg-purple-600 -rotate-12"></span>
+                        <span class="absolute bottom-0 right-0 hidden w-10 h-40 transition-all duration-100 ease-out transform translate-x-10 translate-y-8 bg-purple-400 -rotate-12"></span>
+                        <span class="relative">Go to Profile</span>
+                    </Link>
+                </div>
             </div>
-        </div>
-        
+
         )
     }
 
@@ -174,8 +172,8 @@ export default function AddProduct() {
     return (
         <div>
             <div className="flex overflow-hidden ">
-                <ToastContainer/>
-                
+                <ToastContainer />
+
 
                 <div>
                     <Vendorheaders />
@@ -222,23 +220,35 @@ export default function AddProduct() {
                                         <div>
                                             <label className="text-white dark:text-gray-200" htmlFor="category">Select Category  <span className='text-red-400 text-xl '>*</span></label>
                                             <select name="category" value={values.category} onChange={handleChange} onBlur={handleBlur} id="category" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                                <option value="computer">Computer</option>
-                                                <option value="mobile">Mobile</option>
+                                                <option value="computer">Guitar</option>
+                                                <option value="mobile">keyboard</option>
                                                 <option value="electronic">Electronic</option>
-                                                <option value="household">Household</option>
+                                                <option value="household">Acoustic</option>
+                                                <option value="household">Amplifer</option>
                                             </select>
                                             {errors.category && touched.category ? (<p className="text-red-500">{errors.category}</p>) : null}
                                         </div>
 
                                         <div>
-                                            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Visibility  <span className='text-red-400 text-xl '>*</span></label>
-                                            <select name="visibility" value={values.visibility} onChange={handleChange} onBlur={handleBlur} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                                <option>Public</option>
-                                                <option>Private</option>
-
+                                            <label className="text-white dark:text-gray-200" htmlFor="visibility">
+                                                Visibility <span className="text-red-400 text-xl">*</span>
+                                            </label>
+                                            <select
+                                                name="visibility"
+                                                value={values.visibility}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                                            >
+                                                <option value="">Select visibility</option> {/* Ensure empty value for default */}
+                                                <option value="Public">Public</option>  {/* Correct value binding */}
+                                                <option value="Private">Private</option> {/* Correct value binding */}
                                             </select>
-                                            {errors.visibility && touched.visibility ? (<p className="text-red-500">{errors.visibility}</p>) : null}
+                                            {errors.visibility && touched.visibility ? (
+                                                <p className="text-red-500">{errors.visibility}</p>
+                                            ) : null}
                                         </div>
+
 
 
                                         <div>
@@ -248,13 +258,13 @@ export default function AddProduct() {
                                         </div>
 
                                         <div>
-                                           
-                                               
-                                        {btnhidden===false?( <button onClick={btnHandler}
+
+
+                                            {btnhidden === false ? (<button onClick={btnHandler}
                                                 className="animate-bounce focus:animate-none hover:animate-none inline-flex text-md font-medium bg-indigo-900 mt-3 px-4 py-2 rounded-lg tracking-wide text-white">
                                                 <span className="ml-2">Click for Warrenty</span>
-                                            </button>):(
-                                            
+                                            </button>) : (
+
                                                 <div className=' border-2 border-gray-300 border-dashed rounded-md p-4'>
                                                     <div>
                                                         <label className="text-white dark:text-gray-200" htmlFor="wyear">Warrenty Period</label>
@@ -284,7 +294,7 @@ export default function AddProduct() {
                                                         {errors.warrenty_month && touched.warrenty_month ? (<p className="text-red-500">{errors.warrenty_month}</p>) : null}
 
 
-                                                       
+
                                                     </div>
 
 
@@ -292,20 +302,20 @@ export default function AddProduct() {
                                                 </div>
                                             )};
 
-                                         
+
                                         </div>
 
                                         <div>
-                                             <label className="text-white dark:text-gray-200" htmlFor="esewaid">Esewa Id for Receive payment  <span className='text-red-400 text-xl '>*</span></label>
-                                        <div className='flex  items-center'>
-                                            <div className='w-1/12  mx-2'>
-                                                <img src={esewaimg} alt="" />
-                                            </div>
-                                            <div>
-                                            <input id="salesprice" type="Number" name="esewaid" value={esewa?esewa:null} readOnly className=" appearance-none block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                                            <label className="text-white dark:text-gray-200" htmlFor="esewaid">Esewa Id for Receive payment  <span className='text-red-400 text-xl '>*</span></label>
+                                            <div className='flex  items-center'>
+                                                <div className='w-1/12  mx-2'>
+                                                    <img src={esewaimg} alt="" />
+                                                </div>
+                                                <div>
+                                                    <input id="salesprice" type="Number" name="esewaid" value={esewa ? esewa : null} readOnly className=" appearance-none block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
 
+                                                </div>
                                             </div>
-                                        </div> 
 
                                         </div>
                                         <div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import './Userdetails.css'
-import axios from '../api/api'
+import axios from './api/api'
 
 export default function Userdetails() {
 

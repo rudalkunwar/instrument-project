@@ -8,7 +8,9 @@ const orderplaceController = require('../controllers/OrderController');
 const adminbankController = require('../controllers/AdminBankController');
 const auth = require('../middleware/auth');
 const multer = require('multer');
-const DashboardController= require('../controllers/DashboardController');
+const DashboardController = require('../controllers/DashboardController');
+const AdminDashboardController= require('../controllers/AdminDashboard');
+const AdminController=require('../controllers/AdminLogin');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -40,6 +42,8 @@ router.post('/productuploadsapi', auth, upload.single('image'), productControlle
 router.get('/fetchproductbyvendorapi', auth, productController.fetchproductbyvendor);
 router.get('/fetchproductbyidapi/:id', auth, productController.fetchproductbyid);
 router.get('/allproductapi', productController.allProduct);
+router.post('/productupdate/:id', auth, upload.single('image'), productController.uploadproduct);
+router.get('/deleteproductapi/:id', auth, productController.deleteproduct);
 
 // Order Routes
 router.get('/fetchorderbyvendor', auth, orderplaceController.fetchorderbyvendor);
@@ -48,6 +52,9 @@ router.post('/orderplaceapi', auth, orderplaceController.orderplace);
 router.get('/fetchorderapi', auth, orderplaceController.fetchorder);
 router.get('/esewapaymentverifyapi', orderplaceController.EsewaPaymentVerify);
 router.delete('/deleteorderapi/:id', auth, orderplaceController.deleteorder);
+router.post('/adminorderapi/:id', auth, orderplaceController.adminorder);
+
+router.get('/fetchallorderapi', auth, orderplaceController.fetchallorder);
 
 // Cart Routes
 router.post('/addcartapi', auth, cartController.add_cart);
@@ -63,5 +70,29 @@ router.put('/updateesewaapi', auth, profileController.updateesewa);
 
 // Admin Bank Routes
 router.post('/addbankapi', adminbankController.addbank);
+
+//admin login
+router.post('/adminloginapi', AdminController.adminlogin);
+router.get('/adminregisterapi', AdminController.updateadmin);
+// router.get('/adminproductapi', AdminController.allProduct);
+// router.get('/adminorderapi', AdminController.fetchorder);
+router.get('/adminvendorapi', auth,userControllers.fetchallvendor);
+router.get('/adminvendorapi/:id', auth,userControllers.deletevendor);
+router.get('/fetchalluserapi', auth,userControllers.fetchalluser);
+router.get('/adminusersdelete/:id', auth,userControllers.deleteuser);
+// router.get('/adminuserapi', AdminController.fetchuser);
+// router.get()
+
+//admin dashboard
+router.get('/totalusers',auth,AdminDashboardController.totaluser);
+router.get('/totalvendors',auth,AdminDashboardController.totalvendor);
+router.get('/totalorders',auth,AdminDashboardController.totalorder);
+router.get('/totalproducts',auth,AdminDashboardController.totalproduct);
+router.get('/latestproducts',auth,AdminDashboardController.latestproduct);
+router.get('/latestorders',auth,AdminDashboardController.latestorder);
+router.get('/latestusers',auth,AdminDashboardController.latestuser);
+
+
+
 
 module.exports = router;

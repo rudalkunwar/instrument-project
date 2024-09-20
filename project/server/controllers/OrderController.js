@@ -36,6 +36,7 @@ const orderplace = async (req, res) => {
     paymentMethod,
     items,
     totalAmount,
+    orderStatus: "Pending",
 
   });
   console.log(order);
@@ -270,5 +271,43 @@ const fetchorderbyvendororderid = async (req, res) => {
 };
 
 
+const fetchallorder = async (req, res) => {
+  const orders = await Order.find().populate('customer', 'name email').sort({ createdAt: -1 });
+  if (orders) {
+    return res.status(200).json({ status: "success", message: "order fetched", orders });
+  }
+  else {
+    res.status(400).json({ message: "order not found" });
+  }
+}
 
-module.exports = { orderplace, fetchorder, EsewaPaymentVerify, getorder, deleteorder,fetchorderbyvendor,fetchorderbyvendororderid };
+const adminorder=async(req,res)=>{
+  const { id } = req.params;
+  const { status, paymentStatus } = req.body;
+console.log(status,paymentStatus);
+  try {
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    if (status) {
+      order.orderStatus = status;
+    }
+    if (paymentStatus) {
+      order.paymentStatus = paymentStatus;
+    }
+
+    await order.save();
+
+    res.status(200).json({ message: 'Order updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to update order' });
+  }
+}
+
+
+
+module.exports = { orderplace, fetchorder, EsewaPaymentVerify, getorder, deleteorder,fetchorderbyvendor,fetchorderbyvendororderid,fetchallorder,adminorder };

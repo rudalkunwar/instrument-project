@@ -12,7 +12,7 @@ export default function Product() {
 
   const getProducts = async () => {
     try {
-      const response = await axios.get('/fetchproductbyvendorapi', {
+      const response = await axios.get('/allproductapi', {
         headers: {
           'x-access-token': localStorage.getItem('token')
         }
@@ -52,37 +52,35 @@ export default function Product() {
           'x-access-token': localStorage.getItem('token')
         }
       });
+      console.log("i am here in delete");
       console.log(response);
       getProducts();
     } catch (err) {
       console.log(err);
     }
-
-};
+  };
 
   if (products.length === 0) return (<div>Loading...</div>);
 
   return (
     <div className="container mx-auto p-4">
-      <ToastContainer/>
-      <div className="text-3xl  mb-8 font-bold text-gray-800">
+      <ToastContainer />
+      <div className="text-3xl ml-10 mb-8 font-bold text-gray-800">
         <h2>Product Details</h2>
       </div>
-     <div class="flex justify-between">
-     <div className="mb-4 w-10/12 flex justify-between items-center">
-        <input
-          type="text"
-          placeholder="Search by product name or category"
-          value={search}
-          onChange={handleSearch}
-          className="p-2 border border-gray-300 rounded w-full max-w-md"
-        />
+
+      <div className="flex justify-between">
+        <div className="mb-4  ml-10 w-10/12">
+          <input
+            type="text"
+            placeholder="Search by product name or category"
+            value={search}
+            onChange={handleSearch}
+            className="p-2 border border-gray-300 rounded w-full"
+          />
+        </div>
       </div>
 
-      <div>
-        <Link to="../addproduct" className="bg-blue-600 text-white px-4 py-2 rounded-lg">Add Product</Link>
-      </div>
-     </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
           <thead className="bg-gray-100">
@@ -100,32 +98,37 @@ export default function Product() {
             </tr>
           </thead>
           <tbody>
-            {
-              paginatedProducts.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 border-b text-center">{count++}</td>
-                  <td className="py-3 px-4 border-b">{product._id}</td>
-                  <td className="py-3 px-4 border-b">{product.product_name}</td>
-                  <td className="py-3 px-4 border-b">{product.price.regular_price}</td>
-                  <td className="py-3 px-4 border-b">{product.price.sales_price}</td>
-                  <td className="py-3 px-4 border-b">{product.stock}</td>
-                  <td className="py-3 px-4 border-b">{product.category}</td>
-                  <td className="py-3 px-4 border-b">{product.description}</td>
-                  <td className="py-3 px-4 border-b"><img src={`http://localhost:5000/${product.image}`} alt="product" className="w-20 h-20 object-cover rounded-lg" /></td>
-                  <td className="py-3 px-4 border-b text-center">
-                    <div className="flex justify-center items-center space-x-4">
-                      <Link to={`../productedit/${product._id}`}> <i className="fa-solid fa-edit text-blue-600 text-xl cursor-pointer"></i></Link>
-                     <button onClick={()=>{
-                      deleteproduct(product._id)
-                     }}> <i className="fa-solid fa-trash text-red-600 text-xl cursor-pointer"></i></button>
-                      <i className="fa-solid fa-eye text-gray-500 text-xl cursor-pointer"></i>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            }
+            {paginatedProducts.map((product) => (
+              <tr key={product.id} className="hover:bg-gray-50">
+                <td className="py-3 px-4 border-b text-center">{count++}</td>
+                <td className="py-3 px-4 border-b">{product._id}</td>
+                <td className="py-3 px-4 border-b">{product.product_name}</td>
+                <td className="py-3 px-4 border-b">{product.price.regular_price}</td>
+                <td className="py-3 px-4 border-b">{product.price.sales_price}</td>
+                <td className="py-3 px-4 border-b">{product.stock}</td>
+                <td className="py-3 px-4 border-b">{product.category}</td>
+                <td className="py-3 px-4 border-b">{product.description}</td>
+                <td className="py-3 px-4 border-b">
+                  <img
+                    src={`http://localhost:5000/${product.image}`}
+                    alt="product"
+                    className="w-20 h-20 object-cover rounded-lg"
+                  />
+                </td>
+                <td className="py-3 px-4 border-b text-center">
+                  <div className="flex justify-center items-center space-x-4">
+                    
+                    <i
+                      onClick={() => deleteproduct(product._id)}
+                      className="fa-solid fa-trash text-red-600 text-xl cursor-pointer"
+                    ></i>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
+
         <div className="flex justify-center mt-4">
           <button
             className={`px-3 py-1 mx-1 ${currentPage === 1 ? 'cursor-not-allowed text-gray-400' : 'text-blue-600'}`}
@@ -134,17 +137,15 @@ export default function Product() {
           >
             Previous
           </button>
-          {
-            Array.from({ length: Math.ceil(filteredProducts.length / itemsPerPage) }, (_, i) => (
-              <button
-                key={i + 1}
-                className={`px-3 py-1 mx-1 ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'text-blue-600'}`}
-                onClick={() => handlePageChange(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))
-          }
+          {Array.from({ length: Math.ceil(filteredProducts.length / itemsPerPage) }, (_, i) => (
+            <button
+              key={i + 1}
+              className={`px-3 py-1 mx-1 ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'text-blue-600'}`}
+              onClick={() => handlePageChange(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
           <button
             className={`px-3 py-1 mx-1 ${currentPage === Math.ceil(filteredProducts.length / itemsPerPage) ? 'cursor-not-allowed text-gray-400' : 'text-blue-600'}`}
             onClick={() => handlePageChange(currentPage + 1)}

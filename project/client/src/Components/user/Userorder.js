@@ -1,102 +1,88 @@
-import React, { useEffect, useState } from 'react'
-import '../Assets/css/Userdetails.css'
-import axios from '../api/api'
+import React, { useEffect, useState } from 'react';
+import '../Assets/css/Userdetails.css'; // Ensure this CSS file has relevant styles or use Tailwind CSS
+import axios from '../api/api';
 
 export default function Userorder() {
-    const [order, setorder] = useState([])
+  const [orders, setOrders] = useState([]);
 
-    const getorder = async () => {
-        try {
-            const response = await axios.get('/fetchorderapi', {
-                headers: {
-                    'x-access-token': localStorage.getItem('token')
-                }
-            })
-            console.log(response.data)
-            setorder(response.data.orders)
-        }
-        catch (err) {
-            console.log(err)
-        }
-
+  const getOrders = async () => {
+    try {
+      const response = await axios.get('/fetchorderapi', {
+        headers: {
+          'x-access-token': localStorage.getItem('token'),
+        },
+      });
+      setOrders(response.data.orders);
+    } catch (err) {
+      console.error(err);
     }
+  };
 
+  useEffect(() => {
+    getOrders();
+  }, []);
 
-
-    useEffect(() => {
-        getorder()
-
-    }, [])
-
-    const cancelorder = async (id) => {
-        alert('Are you sure you want to cancel this order?')
-
-        try {
-            const response = await axios.delete(`/deleteorderapi/${id}`, {
-                headers: {
-                    'x-access-token': localStorage.getItem('token')
-                }
-            })
-            console.log(response.data)
-            getorder()
-        }
-        catch (err) {
-            console.log(err)
-        }
-
+  const cancelOrder = async (id) => {
+    if (window.confirm('Are you sure you want to cancel this order?')) {
+      try {
+        await axios.delete(`/deleteorderapi/${id}`, {
+          headers: {
+            'x-access-token': localStorage.getItem('token'),
+          },
+        });
+        getOrders();
+      } catch (err) {
+        console.error(err);
+      }
     }
-    return (
-        <div>
-            <div className="text-3xl font-bold mb-8 text-center">
-                <h2>Order Details</h2>
-            </div>
+  };
 
-            <body class="main_container  ">
+  return (
+    <div className="p-6 w-11/12 m-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">Order Details</h2>
 
-
-                <div class="header_fixed ">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>S No.</th>
-                                <th>OrderId</th>
-                                <th>PaymentMethod</th>
-                                <th>TotalPrice</th>
-                                <th>Date</th>
-                                <th>status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {order.map((item, index) =>
-                            (
-                                <tr>
-                                    <td>{index + 1}</td>
-
-                                    <td>{item._id}</td>
-                                    <td>{item.paymentMethod}</td>
-                                    <td>{item.totalAmount}</td>
-                                    <td>{item.createdAt}</td>
-                                    <td>{item.paymentStatus}</td>
-                                    <td>
-                                        <div>
-                                            <button>View</button>
-                                            {item.paymentStatus != 'Paid' ? (<button onClick={() => { cancelorder(item._id) }} class="bg-red-800 mx-5"> Cancel Order</button>) : null}
-
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                            }
-
-                        </tbody>
-                    </table>
-                </div>
-            </body>
-
-
-
-        </div>
-    )
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">S No.</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OrderId</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Price</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {orders.map((item, index) => (
+              <tr key={item._id}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item._id}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.paymentMethod}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.totalAmount}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.orderStatus}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.createdAt}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.paymentStatus}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <div className="flex space-x-2">
+                    <button className="text-blue-600 hover:text-blue-800">View</button>
+                    {item.paymentStatus !== 'Paid' && (
+                      <button
+                        onClick={() => cancelOrder(item._id)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        Cancel Order
+                      </button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }

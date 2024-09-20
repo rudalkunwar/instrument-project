@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Product = require('../models/ProductModel'); // Correct path to Product model
-const User = require('../models/UserModel'); // Correct path to User model
+const users = require('../models/UserModel'); // Correct path to User model
 
 const orderSchema = new Schema({
   customer: {
     type: Schema.Types.ObjectId,
-    ref: 'User', // Ensure 'User' model is correctly defined elsewhere
+    ref: 'users', // Ensure 'User' model is correctly defined elsewhere
     required: true
   },
   shippingDetails: {
@@ -61,17 +61,26 @@ const orderSchema = new Schema({
   },
   paymentStatus: {
     type: String,
-    enum: ['Pending', 'Paid', 'Failed'],
+    enum: ['Pending', 'Paid', 'unpaid'],
     default: 'Pending'
   },
+
+  orderStatus: {
+    type: String,
+    enum: ['Pending', 'Process', 'Delivery'],
+    default: 'Pending'
+  },
+
+
   createdAt: {
     type: Date,
     default: Date.now
-  },
+},
   updatedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+
 });
 
 orderSchema.pre('save', function(next) {
