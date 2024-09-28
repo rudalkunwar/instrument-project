@@ -1,7 +1,6 @@
 import logo from './logo.svg';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Index from './Components/Pages/Index';
 import Register from './Components/Pages/Register';
 import Login from './Components/Pages/Login';
 import Vendor from './Components/vendor/Index';
@@ -36,6 +35,7 @@ import Vendors from './Components/admin/Vendors';
 import Users from './Components/admin/Users';
 import Ordert from './Components/admin/Order';
 import AboutUs from './Components/Aboutus';
+import Homepage from './Components/Pages/Homepage';
 // import { orderplace } from '../../server/controllers/OrderController';
 
 
@@ -55,7 +55,7 @@ function App() {
         <Routes>
       <Route path="/aboutus" element={<AboutUs/>}/>
 
-          <Route path='/' element={<Index />} />
+          <Route path='/' element={<Homepage />} />
           <Route path='productview' element={<UserRouter Component={Productview}/>}/>
 
           <Route path='/vendors/' element={<VendorProtected Component={PageRouter}/>}>

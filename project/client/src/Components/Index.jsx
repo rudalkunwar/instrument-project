@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import aawaj from "./Assets/dataBaseImage/Aawaj.png";
 import aawaj2 from "./Assets/dataBaseImage/Aawaj2.png";
+import Footer from "./partials/Footer";
 
 
 const IndexLoggedin = () => {
@@ -62,9 +63,6 @@ const IndexLoggedin = () => {
 
     return (
         <div className="flex w-auto">
-
-
-
             <div className="w-screen ">
                 <div className="bg-blue-50 h-screen">
                     <div className="flex justify-between text-center mx-20 items-center">
@@ -191,30 +189,9 @@ const IndexLoggedin = () => {
                                 </div>
                             ))}
                         </div>
+                <Footer/>
+
                     </div>
-
-
-                    <footer className="py-8 bg-gray-900 text-white">
-                        <div className="container mx-auto">
-                            <div className="flex justify-around items-center mb-8">
-                                <div className="flex items-center">
-                                    <img src={aawaj} alt="Company Logo" className="h-40 mr-4" />
-                                    <h1 className="text-lg">Instrument Nepal - Your Destination for Quality Instruments</h1 >
-                                </div>
-
-                                <ul className="grid grid-cols-3 gap-4">
-                                    <li><a href="#" className="hover:text-gray-400">Home</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">Store</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">Order</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">Profile</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">About</a></li>
-                                    <li><a href="#" className="hover:text-gray-400">Help</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="text-center">&copy; 2024 Instrument Nepal. All rights reserved.</div>
-                        </div>
-                    </footer>
                 </div>
             </div>
         </div>
